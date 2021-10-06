@@ -24,6 +24,7 @@ export interface Member {
 }
 
 export interface Post {
+  _id: string
   title: string,
   publish_status: string,
   body: string,

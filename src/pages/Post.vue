@@ -11,17 +11,9 @@
       class="q-ma-xl"
     />
     <div v-if="success && !isLoading" class="row q-pa-md">
-      <div class="col-12">
-        {{post.title}} <small>( {{post._id}} )</small>
-      </div>
-       <div class="q-pa-md q-gutter-md">
-        <q-badge v-for="tag in post.tags" :key="tag" rounded color="secondary" :label="tag" />
-      </div>
-      <div class="col-12" v-html="post.body">
-      </div>
-      <div class="col-12">
-        By: {{post.author}}
-      </div>
+      <PostComponent
+        :post="post"
+      />
     </div>
   </q-page>
 </template>
@@ -32,6 +24,7 @@ import { Post } from '../components/models';
 import axios from 'axios';
 import { Cookies } from 'quasar';
 import { Notify } from 'quasar'
+import PostComponent from '../components/post/Post.vue';
 
 interface ResponseDefault {
   data: Post
@@ -39,6 +32,7 @@ interface ResponseDefault {
 
 export default defineComponent({
   name: 'Post Profile',
+  components: { PostComponent },
   data: function() {
     return {
       post: {},

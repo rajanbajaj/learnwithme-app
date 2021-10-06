@@ -1,4 +1,5 @@
 import { route } from 'quasar/wrappers';
+import { Cookies } from 'quasar'
 import {
   createMemoryHistory,
   createRouter,
@@ -33,6 +34,25 @@ export default route<StateInterface>(function (/* { store, ssrContext } */) {
       process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
     ),
   });
+
+  Router.beforeEach((to, from, next) => {
+    if (to.name && (to.name === 'Login' || to.name === 'Register')) {
+      if (!Cookies.has('access_token')) {
+        next();
+      } else {
+        next({ path: '/#' })
+      }
+    } else {
+      if (!Cookies.has('access_token')) {
+        next({ name: 'Login' });
+      } else {
+        if (to.name && to.name === 'Register') {
+          next({ path: '/#' })
+        }
+        next()
+      }
+    }
+  })
 
   return Router;
 });

@@ -16,28 +16,14 @@
       track-color="transparent"
       class="q-ma-xl"
     />
-    <div class="row" v-else>
-      <q-card v-for="post in posts" :key="post._id" class="my-card">
-        <q-item>
-          <q-item-section>
-            <q-item-label>{{post.title}}</q-item-label>
-            <q-item-label caption>{{post._id}}</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-separator />
-
-        <q-card-actions align="right">
-          <q-btn type="a" :href="`/#posts/${post._id}`" flat color="purple">Visit Post</q-btn>
-        </q-card-actions>
-      </q-card>
-    </div>
+    <PostShortComponent v-for="post in posts" :post="post" :key="post._id" class="q-py-5"/>
   </q-page>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Post } from '../components/models';
+import PostShortComponent from '../components/post/PostShort.vue';
 import axios from 'axios';
 import { Cookies } from 'quasar';
 
@@ -49,6 +35,7 @@ interface ResponseDefault {
 
 export default defineComponent({
   name: 'Posts',
+  components: {PostShortComponent},
   data: function() {
     let posts: Post[] = []
     return {

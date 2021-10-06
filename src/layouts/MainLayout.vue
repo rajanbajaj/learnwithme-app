@@ -111,6 +111,7 @@ export default defineComponent({
     },
     logout() {
       Cookies.remove('access_token');
+      window.location.href = '/';
     }
   }
   })
