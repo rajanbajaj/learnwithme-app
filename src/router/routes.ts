@@ -54,6 +54,18 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/MediaGroup.vue') }],
   },
 
+  {
+    path: '/media-groups/register',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/RegisterMediaGroup.vue') }],
+  },
+
+  {
+    path: '/media-groups/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Media.vue') }],
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

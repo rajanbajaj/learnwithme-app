@@ -79,6 +79,11 @@ const linksList = [
     icon: 'perm_media',
     link: '/#media-groups'
   },
+  {
+    title: 'Register Media Group',
+    icon: 'perm_media',
+    link: '/#media-groups/register'
+  },
 ];
 
 import { defineComponent } from 'vue'

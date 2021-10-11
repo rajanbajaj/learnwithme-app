@@ -1,12 +1,5 @@
 <template>
   <q-page>
-    <q-banner v-if="isError" dense class="bg-red text-white">
-      {{error}}
-      <template v-slot:action>
-        <q-btn flat color="white" label="Dismiss" @click="dismiss" />
-      </template>
-    </q-banner>
-
     <div class="q-pa-md">
 
     <q-form
@@ -39,8 +32,9 @@
 
       <q-editor
         v-model="body"
-        :dense="$q.screen.lt.md"
+        :dense="$q.screen.lt.lg"
         :toolbar="[
+          ['save', 'media'],
           [
             {
               label: $q.lang.editor.align,
@@ -49,16 +43,9 @@
               list: 'only-icons',
               options: ['left', 'center', 'right', 'justify']
             },
-            {
-              label: $q.lang.editor.align,
-              icon: $q.iconSet.editor.align,
-              fixedLabel: true,
-              options: ['left', 'center', 'right', 'justify']
-            }
           ],
           ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
-          ['token', 'hr', 'link', 'custom_btn'],
-          ['print', 'fullscreen'],
+          ['hr', 'link', 'custom_btn'],
           [
             {
               label: $q.lang.editor.formatting,
@@ -111,9 +98,8 @@
             'removeFormat'
           ],
           ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
           ['undo', 'redo'],
-          ['viewsource']
+          ['viewsource', 'fullscreen']
         ]"
         :fonts="{
           arial: 'Arial',
@@ -125,12 +111,41 @@
           times_new_roman: 'Times New Roman',
           verdana: 'Verdana'
         }"
+        :definitions="{
+          media: {
+            tip: 'Add media',
+            icon: 'photo',
+            label: 'Media',
+            fixedLabel: true,
+            fixedIcon: true,
+            handler: addMedia
+          }
+        }"
       />
       <div>
         <q-btn label="Submit" type="submit" color="primary"/>
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
       </div>
     </q-form>
+
+    <q-dialog
+      v-model="medium"
+    >
+      <q-card style="width: 700px; max-width: 80vw;">
+        <q-card-section>
+          <div class="text-h6">Medium</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+
+          HERE
+        </q-card-section>
+
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn flat label="OK" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
   </div>
   </q-page>
@@ -140,7 +155,7 @@
 import { defineComponent } from 'vue';
 import axios from 'axios';
 import { ref } from 'vue'
-import { Cookies } from 'quasar';
+import { Cookies, Notify } from 'quasar';
 
 export default defineComponent({
   name: 'Register Post',
@@ -155,8 +170,6 @@ export default defineComponent({
   data() {
     return {
       isLoading: false,
-      isError: false,
-      error: '',
       accessToken: '',
       tags: [],
       tagOptions: [
@@ -167,14 +180,16 @@ export default defineComponent({
       ],
       publishOptions: [
         'DRAFT',
-        'PUBLISH',
+        'PUBLIC',
+        'PRIVATE'
       ],
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`
         }
       },
-      url: 'http://localhost:3000/api/posts'
+      url: 'http://localhost:3000/api/posts',
+      medium: false
     };
   },
   methods: {
@@ -188,28 +203,20 @@ export default defineComponent({
       };
 
       axios.post(this.url, payload, this.config).then(r => {
-        console.log(r);
+        Notify.create({
+          message: 'Successfully Created',
+          color: 'green',
+        });
       }).catch(e => {
-        this.isError = true;
-        this.error = e.message;
+        Notify.create({
+          message: e.message,
+          color: 'red',
+        });
       });
     },
 
-    saveWork() {
-      let payload = {
-        publish_status : 'DRAFT',
-        body: this.body,
-        title : this.title,
-        tags : this.tags.toString(),
-        author: this.parseJwt(Cookies.get('access_token')).id,
-      };
-
-      axios.post(this.url, payload, this.config).then(r => {
-        console.log(r);
-      }).catch(e => {
-        this.isError = true;
-        this.error = e.message;
-      });
+    addMedia() {
+      this.medium=true;
     },
 
     onReset () {
@@ -219,17 +226,12 @@ export default defineComponent({
       this.author = '';
     },
 
-    dismiss() {
-      this.error = '';
-      this.isError = false;
-    },
-
     parseJwt(token: string) {
       if (!token) { return; }
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace('-', '+').replace('_', '/');
       return JSON.parse(window.atob(base64));
-    }
+    },
   }
 });
 </script>

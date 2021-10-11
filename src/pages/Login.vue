@@ -51,7 +51,7 @@ export default defineComponent({
           color: 'green',
         });
         setTimeout(() => {
-          window.location.href = "/"
+          window.location.href = '/'
         }, 5000);
       }).catch(e => {
         this.isLoading = false;
