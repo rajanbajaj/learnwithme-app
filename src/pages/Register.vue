@@ -73,7 +73,7 @@
         lazy-rules
         :rules="[val => val !== null && val !== '' || 'Please type your pincode']"
       />
-
+      <q-select filled v-model="profileType" :options="profileTypeOptions" label="Profile Type" />
       <q-toggle v-model="accept" label="I accept the license and terms" />
 
       <div>
@@ -109,7 +109,8 @@ export default defineComponent({
       accept: ref(''),
       pincode: ref(''),
       birthdate: ref('2021/01/01'),
-      username: ''
+      username: '',
+      profileType: ref('PUBLIC'),
     }
   },
   data() {
@@ -125,6 +126,7 @@ export default defineComponent({
         'Himachal',
         'Other'
       ],
+      profileTypeOptions: ['PUBLIC', 'PRIVATE'],
       url: 'http://localhost:3000/api/members',
       success: false
     };

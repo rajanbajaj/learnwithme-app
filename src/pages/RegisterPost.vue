@@ -11,8 +11,6 @@
         filled
         v-model="title"
         label="Post Title *"
-        lazy-rules
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
 
       <q-select filled v-model="publish_status" :options="publishOptions" label="Status" />
@@ -131,20 +129,7 @@
     <q-dialog
       v-model="medium"
     >
-      <q-card style="width: 700px; max-width: 80vw;">
-        <q-card-section>
-          <div class="text-h6">Medium</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-
-          HERE
-        </q-card-section>
-
-        <q-card-actions align="right" class="bg-white text-teal">
-          <q-btn flat label="OK" v-close-popup />
-        </q-card-actions>
-      </q-card>
+      <ContentPreviewComponent :content="body" />
     </q-dialog>
 
   </div>
@@ -156,9 +141,11 @@ import { defineComponent } from 'vue';
 import axios from 'axios';
 import { ref } from 'vue'
 import { Cookies, Notify } from 'quasar';
+import ContentPreviewComponent from '../components/post/ContentPreview.vue';
 
 export default defineComponent({
   name: 'Register Post',
+  components: {ContentPreviewComponent},
   setup() {
     return {
       title: ref(''),

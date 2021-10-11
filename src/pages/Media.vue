@@ -12,28 +12,7 @@
     />
 
     <div v-else class="q-pa-md row items-start q-gutter-md">
-      <q-card v-for="m in media" :key="m._id" class="my-card">
-        <!-- <q-video src="https://www.youtube.com/embed/k3_tw44QsZQ?rel=0" /> -->
-        <q-img v-if="m.mimetype.search('image') !== -1" :src="m._embedded" :alt="m.originalname" />
-        <q-video
-          v-else-if="m.mimetype.search('video') !== -1"
-          :src="m._embedded"
-        />
-
-        <q-card-section>
-          <div class="text-h6">{{m.originalname}}</div>
-          <div class="text-subtitle2">{{m._id}}</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          Premissions: {{m.security.permissions}}<br>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat color="red" @click="deleteMedia(m._id)">Delete</q-btn>
-          <q-btn type="a" :href="m._embedded" flat color="purple">Open</q-btn>
-        </q-card-actions>
-      </q-card>
+      <MediaCard v-for="m in media" :key="m._id" :media="m" />
       <div class="q-pa-l">
         <MediaUploadButton :mediaGroupId="mediaGroupId" />
       </div>
@@ -47,6 +26,7 @@ import { Media, MediaGroup } from '../components/models';
 import axios from 'axios';
 import { Cookies, Notify } from 'quasar';
 import MediaUploadButton from '../components/media/MediaUploadButton.vue';
+import MediaCard from '../components/media/MediaCard.vue';
 import { watchFile } from 'fs';
 
 interface ResponseDefault {
@@ -64,7 +44,7 @@ interface ResponseDefault {
 
 export default defineComponent({
   name: 'Media',
-  components: {MediaUploadButton},
+  components: {MediaUploadButton, MediaCard},
   data: function() {
     let media: Media[] = [];
 
@@ -104,19 +84,6 @@ export default defineComponent({
       this.error = '';
       this.isError = false;
     },
-    deleteMedia(id: string) {
-      axios.delete(`${this.base_url}/api/media/${id}`, this.config).then((r) => {
-        Notify.create({
-          message: 'Successfully Deleted',
-          color: 'green',
-        });
-      }).catch(e => {
-        Notify.create({
-          message: e.message,
-          color: 'red',
-        });
-      });
-    }
   }
 });
 </script>

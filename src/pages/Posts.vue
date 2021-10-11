@@ -16,7 +16,21 @@
       track-color="transparent"
       class="q-ma-xl"
     />
-    <PostShortComponent v-for="post in posts" :post="post" :key="post._id" class="q-py-5"/>
+    <div v-else class="q-pa-md row items-start q-gutter-md">
+      <PostShortComponent v-for="post in posts" :post="post" :key="post._id" class="col-5" />
+    </div>
+
+    <div>
+      <div class="q-pa-lg flex flex-center">
+        <q-pagination
+          v-model="currentPage"
+          color="purple"
+          :max="max"
+          :max-pages="maxPages"
+          boundary-numbers
+        />
+    </div>
+    </div>
   </q-page>
 </template>
 
@@ -41,22 +55,37 @@ export default defineComponent({
     return {
       posts,
       isLoading: true,
-      fetch_url: 'http://localhost:3000/api/posts',
+      fetch_url: 'http://localhost:3000/api/posts?status=PUBLIC&limit=4',
+      fetch_count_url: 'http://localhost:3000/api/posts/count?status=PUBLIC',
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`
         }
       },
       isError: false,
-      error: ''
+      error: '',
+      currentPage: 1,
+      max: 0,
+      maxPages: 0 
     }
   },
   created() {
-    this.getData()
+    let keyword = this.$route.query.keyword;
+    if (keyword) {
+      this.fetch_url = this.fetch_url + `&keyword=${keyword}`
+      this.fetch_count_url = this.fetch_count_url + `&keyword=${keyword}`
+    }
+    this.getData();
+    this.getCount();
+  },
+  watch: {
+    currentPage: function () {
+      this.getData();
+    }
   },
   methods: {
     getData() {
-      axios.get(this.fetch_url, this.config).then((r: ResponseDefault) => {
+      axios.get(this.fetch_url + `&start=${(this.currentPage-1) * 4}`, this.config).then((r: ResponseDefault) => {
         let x = r.data.results
         this.posts = x
         this.isLoading = false
@@ -66,6 +95,20 @@ export default defineComponent({
         this.error = e.message;
       });
     },
+
+    getCount() {
+      axios.get(this.fetch_count_url, this.config).then(r => {
+        let x = r.data
+        this.max = x % 4 ? x/4 + 1 : x/4
+        this.maxPages = x/8 + 1
+        this.isLoading = false
+      }).catch(e => {
+        this.isLoading = false;
+        this.isError = true;
+        this.error = e.message;
+      });
+    },
+
     dismiss() {
       this.error = '';
       this.isError = false;

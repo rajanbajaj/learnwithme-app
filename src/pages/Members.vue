@@ -17,7 +17,7 @@
       class="q-ma-xl"
     />
     <div class="row" v-else>
-      <q-card v-for="member in members" :key="member._id" class="my-card">
+      <q-btn v-for="member in members" :key="member._id" class="my-card q-ma-md q-pa-md" type="a" :href="`/#members/${member._id}`">
         <q-item>
           <q-item-section avatar>
             <q-avatar>
@@ -30,13 +30,7 @@
             <q-item-label caption>{{member._id}}</q-item-label>
           </q-item-section>
         </q-item>
-
-        <q-separator />
-
-        <q-card-actions align="right">
-          <q-btn type="a" :href="`/#members/${member._id}`" flat color="purple">Visit Profile</q-btn>
-        </q-card-actions>
-      </q-card>
+      </q-btn>
     </div>
   </q-page>
 </template>

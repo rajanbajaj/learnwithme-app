@@ -14,11 +14,36 @@
         <q-toolbar-title>
           LWM
         </q-toolbar-title>
-        <div class="q-pa-md">LWM v{{ version }}</div>
-        <q-separator dark vertical />
-        <q-btn v-if="loginStatus" @click="logout" stretch flat label="Logout" />
+        <div class="q-px-md">
+          <q-toggle
+            v-model="dark"
+            color="white"
+          />
+        </div>
+        <div class="q-px-md">LWM v{{ version }}</div>
+        <q-separator class="q-mx-md" dark vertical />
+
+        <q-btn class="q-mx-md"  flat round v-if="loginStatus">
+          <q-avatar size="32px">
+            <img :src="tokenData.gravatar" />
+          </q-avatar>
+          <q-menu>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup>
+                <q-item-section>
+                  <q-item-section><q-btn v-close-popup type="a" stretch flat :href="`/#members/${tokenData.id}`" label="Profile" /></q-item-section>
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable v-close-popup>
+                <q-item-section><q-btn icon="logout" v-close-popup @click="logout" stretch flat label="Logout" /></q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+
         <q-btn v-if="!loginStatus" type="a" href="/#login" stretch flat label="Login" />
-        <q-separator dark vertical />
+        <q-separator v-if="!loginStatus" dark vertical />
         <q-btn v-if="!loginStatus" type="a" href="/#register" stretch flat label="Register" />
       </q-toolbar>
     </q-header>
@@ -51,13 +76,14 @@
 
 <script lang="ts">
 import EssentialLink from '../components/EssentialLink.vue'
+import { Dark } from 'quasar'
 
 const linksList = [
   {
     title: 'Learn With Us',
     caption: 'home',
     icon: 'school',
-    link: '/'
+    link: '/#'
   },
   {
     title: 'Members',
@@ -106,7 +132,23 @@ export default defineComponent({
     return {
       leftDrawerOpen: false,
       essentialLinks: linksList,
-      version: require('../../package.json').version
+      version: require('../../package.json').version,
+      accessToken: Cookies.get('access_token'),
+      tokenData: [],
+      dark: Dark.isActive ? true : false
+    }
+  },
+
+  mounted() {
+    if (this.loginStatus) {
+      this.tokenData = this.parseJwt(this.accessToken);
+    }
+  },
+
+  watch: {
+    dark: function(newValue) {
+      Dark.set(newValue);
+      return;
     }
   },
 
@@ -114,9 +156,18 @@ export default defineComponent({
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
+    toggleDarkMode() {
+      Dark.toggle()
+    },
     logout() {
       Cookies.remove('access_token');
       window.location.href = '/';
+    },
+    parseJwt(token: String) {
+      if (!token) { return; }
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace('-', '+').replace('_', '/');
+      return JSON.parse(window.atob(base64));
     }
   }
   })

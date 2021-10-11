@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="col">
     <h1>
       <q-icon :name="icon" />
       {{post.title}}
