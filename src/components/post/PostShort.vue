@@ -22,7 +22,8 @@
         <q-btn flat round :color="bookmarkColor" @click="bookmark(post._id)" icon="bookmark" />
         <q-btn flat round hint="share" @click="share(post._id)" icon="share" />
         <q-btn flat round @click="deletePost(post._id)" icon="delete" />
-        <q-btn type="a" :href="`/#posts/${post._id}`" flat icon="play_lesson"></q-btn>
+        <q-btn type="a" :href="`/#posts/${post._id}`" flat icon="play_lesson" />
+        <q-btn type="a" :href="`/#posts/edit/${post._id}`" flat icon="edit" />
       </q-card-actions>
     </q-card>
         

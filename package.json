@@ -1,8 +1,8 @@
 {
   "name": "learnwithme-app",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "description": "A personal learning blog",
+  "productName": "LWM",
   "author": "Rajan Bajaj (rajanbajajkota@gmail.com)",
   "private": true,
   "scripts": {

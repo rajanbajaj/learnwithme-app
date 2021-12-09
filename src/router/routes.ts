@@ -43,6 +43,12 @@ const routes: RouteRecordRaw[] = [
   },
 
   {
+    path: '/posts/edit/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/EditPost.vue') }],
+  },
+
+  {
     path: '/posts/:id',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Post.vue') }],
