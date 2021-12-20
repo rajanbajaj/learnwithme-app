@@ -142,6 +142,11 @@ import axios from 'axios';
 import { ref } from 'vue'
 import { Cookies, Notify } from 'quasar';
 import ContentPreviewComponent from '../components/post/ContentPreview.vue';
+import { Post } from '../components/models';
+
+interface ResponseDefault {
+  data: Post
+}
 
 export default defineComponent({
   name: 'Edit Post',
@@ -155,11 +160,13 @@ export default defineComponent({
     }
   },
   data() {
+    let tagsx: String = '';
     return {
+      success: false,
       post: {},
       isLoading: false,
       accessToken: '',
-      tags: [],
+      tags: tagsx,
       tagOptions: [
         'blog',
         'media',
@@ -177,7 +184,6 @@ export default defineComponent({
         }
       },
       fetch_url: `http://localhost:3000/api/posts/${this.$route.params.id}`,
-      // url: 'http://localhost:3000/api/posts',
       medium: false
     };
   },
@@ -190,10 +196,10 @@ export default defineComponent({
     getData() {
       axios.get(this.fetch_url, this.config).then((r: ResponseDefault) => {
         this.post = r.data
-        this.title = this.post.title,
-        this.body = this.post.body,
-        this.tags = this.post.tags,
-        this.publish_status = this.post.publish_status,
+        this.title = r.data.title
+        this.body = r.data.body
+        this.tags = r.data.tags
+        this.publish_status = r.data.publish_status
         this.isLoading = false
         this.success = true
       }).catch(e => {
@@ -234,7 +240,7 @@ export default defineComponent({
     onReset () {
       this.publish_status = '';
       this.title = '';
-      this.tags = [];
+      this.tags = '';
       this.author = '';
     },
 

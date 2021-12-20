@@ -17,7 +17,7 @@
       class="q-ma-xl"
     />
     <div v-else class="q-pa-md row items-start q-gutter-md">
-      <PostShortComponent v-for="post in posts" :post="post" :key="post._id" class="col-5" />
+      <PostShortComponent v-for="post in posts" :post="post" :key="post._id" class="col-md-5" />
     </div>
 
     <div>

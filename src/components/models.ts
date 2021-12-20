@@ -19,6 +19,7 @@ export interface Post {
   _id: string,
   title: string,
   publish_status: string,
+  tags: string,
   body: string,
   author: string,
   createdAt: Date,
