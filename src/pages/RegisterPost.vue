@@ -25,7 +25,6 @@
         input-debounce="0"
         new-value-mode="add-unique"
         style="width: 250px"
-        :options="tagOptions"
       />
 
       <q-editor
@@ -159,12 +158,6 @@ export default defineComponent({
       isLoading: false,
       accessToken: '',
       tags: [],
-      tagOptions: [
-        'blog',
-        'media',
-        'photography',
-        'coding'
-      ],
       publishOptions: [
         'DRAFT',
         'PUBLIC',
