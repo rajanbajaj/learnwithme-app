@@ -13,7 +13,14 @@
         label="Post Title *"
       />
 
-      <q-select filled v-model="publish_status" :options="publishOptions" label="Status" />
+      <q-select 
+        filled 
+        v-model="post_visibility" 
+        :options="visibilityOptions" 
+        label="Visibility"
+        map-options
+        emit-value
+      />
       <q-select
         label="Tags"
         filled
@@ -148,7 +155,7 @@ export default defineComponent({
   setup() {
     return {
       title: ref(''),
-      publish_status: ref(''),
+      post_visibility: ref("PRIVATE"),
       body: ref(''),
       author: ref(''),
     }
@@ -158,10 +165,22 @@ export default defineComponent({
       isLoading: false,
       accessToken: '',
       tags: [],
-      publishOptions: [
-        'DRAFT',
-        'PUBLIC',
-        'PRIVATE'
+      visibilityOptions: [
+        {
+          label: 'PRIVATE (Visibility: Self)',
+          value: 'PRIVATE',
+          description: 'Visibility: Self'
+        },
+        {
+          label: 'PUBLIC (Visibility: All users)',
+          value: 'PUBLIC',
+          description: 'Visibility: All users'
+        },
+        {
+          label: 'PUBLIC_RESTRICTED (Visibility: Logged in users)',
+          value: 'PUBLIC_RESTRICTED',
+          description: 'Visibility: Logged in users'
+        },
       ],
       config: {
         headers: {
@@ -175,13 +194,12 @@ export default defineComponent({
   methods: {
     onSubmit() {
       let payload = {
-        publish_status : this.publish_status,
+        publish_status : this.post_visibility,
         body: this.body,
         title : this.title,
         tags : this.tags.toString(),
         author: this.parseJwt(Cookies.get('access_token')).id,
       };
-
       axios.post(this.url, payload, this.config).then(r => {
         Notify.create({
           message: 'Successfully Created',
@@ -200,7 +218,7 @@ export default defineComponent({
     },
 
     onReset () {
-      this.publish_status = '';
+      this.post_visibility = "PRIVATE"
       this.title = '';
       this.tags = [];
       this.author = '';

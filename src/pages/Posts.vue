@@ -17,7 +17,7 @@
       class="q-ma-xl"
     />
     <div v-else class="q-pa-md row items-start q-gutter-md">
-      <PostShortComponent v-for="post in posts" :post="post" :key="post._id" class="col-md-5" />
+      <PostShortComponent v-for="post in posts" :post="post" :key="post._id" :tagBaseLink="'#'+$route.path+'?keyword='" class="col-md-5" />
     </div>
 
     <div>
@@ -60,8 +60,8 @@ export default defineComponent({
     return {
       posts,
       isLoading: true,
-      fetch_url: 'http://localhost:3000/api/posts?status=PUBLIC&limit=4',
-      fetch_count_url: 'http://localhost:3000/api/posts/count?status=PUBLIC',
+      fetch_url: 'http://localhost:3000/api/posts?limit=4&user_id=' + this.parseJwt(Cookies.get('access_token')).id,
+      fetch_count_url: 'http://localhost:3000/api/posts/count?user_id=' + this.parseJwt(Cookies.get('access_token')).id,
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`
@@ -117,7 +117,14 @@ export default defineComponent({
     dismiss() {
       this.error = '';
       this.isError = false;
-    }
+    },
+
+    parseJwt(token: string) {
+      if (!token) { return; }
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace('-', '+').replace('_', '/');
+      return JSON.parse(window.atob(base64));
+    },
   }
 });
 </script>

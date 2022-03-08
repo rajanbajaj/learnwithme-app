@@ -13,7 +13,13 @@
         label="Post Title *"
       />
 
-      <q-select filled v-model="publish_status" :options="publishOptions" label="Status" />
+      <q-select 
+        filled v-model="post_visibility" 
+        :options="visibilityOptions" 
+        label="Status"
+        map-options
+        emit-value
+      />
       <q-select
         label="Tags"
         filled
@@ -153,7 +159,7 @@ export default defineComponent({
   setup() {
     return {
       title: ref(''),
-      publish_status: ref(''),
+      post_visibility: ref(''),
       body: ref(''),
       author: ref(''),
     }
@@ -166,10 +172,22 @@ export default defineComponent({
       isLoading: false,
       accessToken: '',
       tags: tagsx,
-      publishOptions: [
-        'DRAFT',
-        'PUBLIC',
-        'PRIVATE'
+      visibilityOptions: [
+        {
+          label: 'PRIVATE (Visibility: Self)',
+          value: 'PRIVATE',
+          description: 'Visibility: Self'
+        },
+        {
+          label: 'PUBLIC (Visibility: All users)',
+          value: 'PUBLIC',
+          description: 'Visibility: All users'
+        },
+        {
+          label: 'PUBLIC_RESTRICTED (Visibility: Logged in users)',
+          value: 'PUBLIC_RESTRICTED',
+          description: 'Visibility: Logged in users'
+        },
       ],
       config: {
         headers: {
@@ -192,7 +210,7 @@ export default defineComponent({
         this.title = r.data.title
         this.body = r.data.body
         this.tags = r.data.tags
-        this.publish_status = r.data.publish_status
+        this.post_visibility = r.data.publish_status
         this.isLoading = false
         this.success = true
       }).catch(e => {
@@ -206,7 +224,7 @@ export default defineComponent({
 
     onSubmit() {
       let payload = {
-        publish_status : this.publish_status,
+        publish_status : this.post_visibility,
         body: this.body,
         title : this.title,
         tags : this.tags.toString(),
@@ -231,7 +249,7 @@ export default defineComponent({
     },
 
     onReset () {
-      this.publish_status = '';
+      this.post_visibility = '';
       this.title = '';
       this.tags = '';
       this.author = '';

@@ -13,17 +13,47 @@
 
       <q-separator />
       <q-card-section>
-        <q-badge v-for="tag in post.tags" :key="tag" outline color="secondary" :label="tag" />
+        <router-link v-for="tag in post.tags" :key="tag" :to="'?keyword=' + tag" v-slot="tagLinkProps">
+          <q-btn
+            color="secondary" 
+            :label="tag"
+            @click="reloadPage"
+          />
+        </router-link>
       </q-card-section>
 
       <q-separator />
       <q-card-actions>
-        <q-btn flat round :color="likeColor" @click="like(post._id)" icon="favorite" />
-        <q-btn flat round :color="bookmarkColor" @click="bookmark(post._id)" icon="bookmark" />
-        <q-btn flat round hint="share" @click="share(post._id)" icon="share" />
-        <q-btn flat round @click="deletePost(post._id)" icon="delete" />
-        <q-btn type="a" :href="`/#posts/${post._id}`" flat icon="play_lesson" />
-        <q-btn type="a" :href="`/#posts/edit/${post._id}`" flat icon="edit" />
+        <q-btn flat round :color="likeColor" @click="like(post._id)" icon="favorite">
+          <q-tooltip>
+            Favourite
+          </q-tooltip>
+        </q-btn>
+        <q-btn flat round :color="bookmarkColor" @click="bookmark(post._id)" icon="bookmark">
+          <q-tooltip>
+            Save
+          </q-tooltip>
+        </q-btn>
+        <q-btn flat round hint="share" @click="share(post._id)" icon="share">
+          <q-tooltip>
+            Share
+          </q-tooltip>
+        </q-btn>
+        <q-btn flat round @click="deletePost(post._id)" icon="delete">
+          <q-tooltip>
+            Delete
+          </q-tooltip>
+        </q-btn>
+        <q-btn type="a" :href="`/#posts/${post._id}`" flat icon="play_lesson">
+          <q-tooltip>
+            Read
+          </q-tooltip>
+        </q-btn>
+        <q-btn type="a" :href="`/#posts/edit/${post._id}`" flat icon="edit">
+          <q-tooltip>
+            Edit
+          </q-tooltip>
+        </q-btn>
       </q-card-actions>
     </q-card>
         
@@ -40,7 +70,8 @@ export default defineComponent({
   name: 'PostShortComponent',
   props: {
     post: { type: Object as () => Post, required: true},
-    icon: { type: String, default: 'article'}
+    icon: { type: String, default: 'article'},
+    tagBaseLink: { type: String, default: ''}
   },
   data() {
     return {
@@ -58,6 +89,13 @@ export default defineComponent({
       bookmarks: 0,
       isLikedByCurrentUser: 0,
       isBookmarkedByCurrentUser: 0,
+      tagLinkProps: {
+        color: '',
+        noCaps: true,
+        label: '',
+        outline: true,
+        href: ''
+      }
     }
   },
   mounted() {
@@ -139,6 +177,9 @@ export default defineComponent({
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace('-', '+').replace('_', '/');
       return JSON.parse(window.atob(base64));
+    },
+    reloadPage() {
+      setTimeout(() => {window.location.reload()}, 1000)
     }
   }
 })
