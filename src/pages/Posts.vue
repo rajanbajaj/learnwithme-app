@@ -27,9 +27,14 @@
           color="purple"
           :max="max"
           :max-pages="maxPages"
-          boundary-numbers
+          boundary-links
+          direction-links
+          icon-first="skip_previous"
+          icon-last="skip_next"
+          icon-prev="fast_rewind"
+          icon-next="fast_forward"
         />
-    </div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -99,8 +104,8 @@ export default defineComponent({
     getCount() {
       axios.get(this.fetch_count_url, this.config).then(r => {
         let x = r.data
-        this.max = x % 4 ? x/4 + 1 : x/4
-        this.maxPages = x/8 + 1
+        this.max = Math.ceil(x/4)
+        this.maxPages = Math.ceil(x/8)
         this.isLoading = false
       }).catch(e => {
         this.isLoading = false;
