@@ -25,6 +25,7 @@ import axios from 'axios';
 import { Cookies } from 'quasar';
 import { Notify } from 'quasar'
 import PostComponent from '../components/post/Post.vue';
+import GlobalConstants from '../constants/GlobalConstants';
 
 interface ResponseDefault {
   data: Post
@@ -37,7 +38,7 @@ export default defineComponent({
     return {
       post: {},
       isLoading: true,
-      fetch_url: `http://localhost:3000/api/posts/${this.$route.params.id}`,
+      fetch_url: `${GlobalConstants.API_SERVER}/api/posts/${this.$route.params.id}`,
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`

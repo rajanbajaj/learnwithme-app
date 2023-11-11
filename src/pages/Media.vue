@@ -28,6 +28,7 @@ import { Cookies, Notify } from 'quasar';
 import MediaUploadButton from '../components/media/MediaUploadButton.vue';
 import MediaCard from '../components/media/MediaCard.vue';
 import { watchFile } from 'fs';
+import GlobalConstants from '../constants/GlobalConstants';
 
 interface ResponseDefault {
   data: {
@@ -53,8 +54,8 @@ export default defineComponent({
       mediaGroup: {} as MediaGroup,
       isLoading: true,
       mediaGroupId: this.$route.params.id,
-      fetch_url: `http://localhost:3000/api/${this.$route.params.id}/media?expand=mediaGroup`,
-      base_url: 'http://localhost:3000',
+      fetch_url: `${GlobalConstants.API_SERVER}/api/${this.$route.params.id}/media?expand=mediaGroup`,
+      base_url: `${GlobalConstants.API_SERVER}`,
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`

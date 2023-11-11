@@ -40,6 +40,7 @@ import { defineComponent } from 'vue';
 import { Member } from '../components/models';
 import axios from 'axios';
 import { Cookies } from 'quasar';
+import GlobalConstants from '../constants/GlobalConstants';
 
 interface ResponseDefault {
   data: {
@@ -54,7 +55,7 @@ export default defineComponent({
     return {
       members,
       isLoading: true,
-      fetch_url: 'http://localhost:3000/api/members',
+      fetch_url: `${GlobalConstants.API_SERVER}/api/members`,
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`

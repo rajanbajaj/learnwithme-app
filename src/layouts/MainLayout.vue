@@ -129,11 +129,13 @@ export default defineComponent({
   },
 
   data() {
+    let a = '';
+    a = (Cookies.get('access_token') !== null) ? Cookies.get('access_token') : '';
     return {
       leftDrawerOpen: false,
       essentialLinks: linksList,
       version: require('../../package.json').version,
-      accessToken: Cookies.get('access_token'),
+      accessToken: a,
       tokenData: [],
       dark: Dark.isActive ? true : false
     }

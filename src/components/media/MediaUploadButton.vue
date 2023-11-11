@@ -29,6 +29,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Cookies } from 'quasar';
+import GlobalConstants from '../../constants/GlobalConstants';
 
 export default defineComponent({
   name: 'MediaUpladButton',
@@ -38,7 +39,7 @@ export default defineComponent({
   data () {
     return {
       medium: false,
-      uploadURL: `http://localhost:3000/api/${this.mediaGroupId}/media`,
+      uploadURL: `${GlobalConstants.API_SERVER}/api/${this.mediaGroupId}/media`,
       access_token: Cookies.get('access_token')
     }
   },

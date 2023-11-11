@@ -29,6 +29,7 @@ import { defineComponent } from 'vue'
 import {Media}  from '../models';
 import axios from 'axios';
 import { Cookies, Notify } from 'quasar';
+import GlobalConstants from '../../constants/GlobalConstants'
 
 export default defineComponent({
   name: 'MediaCardComponent',
@@ -37,7 +38,7 @@ export default defineComponent({
   },
   data: function() {
     return {
-      base_url: 'http://localhost:3000',
+      base_url: GlobalConstants.API_SERVER,
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`

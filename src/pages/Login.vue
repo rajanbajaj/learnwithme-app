@@ -15,6 +15,7 @@ import { ref } from 'vue'
 import axios from 'axios';
 import { Cookies } from 'quasar'
 import { Notify } from 'quasar'
+import GlobalConstants from '../constants/GlobalConstants';
 
 export default defineComponent({
   name: 'Login',
@@ -39,7 +40,7 @@ export default defineComponent({
   methods: {
     authenticate() {
       this.isLoading = true;
-      let authentication_server = 'http://localhost:3000';
+      let authentication_server = `${GlobalConstants.API_SERVER}`;
       axios.post(authentication_server+'/api/login', {email: this.email, password: this.password}).then(r => {
         this.accessToken = r.data.accessToken;
         Cookies.set('access_token', this.accessToken)

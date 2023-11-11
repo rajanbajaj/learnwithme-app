@@ -13,7 +13,7 @@
 
       <q-separator />
       <q-card-section>
-        <router-link v-for="tag in post.tags" :key="tag" :to="'?keyword=' + tag" v-slot="tagLinkProps">
+        <router-link v-for="tag in post.tags" :key="tag" :to="'?keyword=' + tag">
           <q-btn
             color="secondary" 
             :label="tag"
@@ -65,6 +65,7 @@ import { defineComponent } from 'vue'
 import {Post}  from '../models';
 import { Cookies, Notify } from 'quasar';
 import axios from 'axios';
+import GlobalConstants from '../../constants/GlobalConstants';
 
 export default defineComponent({
   name: 'PostShortComponent',
@@ -78,7 +79,7 @@ export default defineComponent({
       likeColor: 'default',
       bookmarkColor: 'default',
       shareColor: 'secondary',
-      fetch_url: `http://localhost:3000/api/posts/${this.post._id}`,
+      fetch_url: `${GlobalConstants.API_SERVER}/api/posts/${this.post._id}`,
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`

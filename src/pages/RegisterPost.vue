@@ -148,6 +148,7 @@ import axios from 'axios';
 import { ref } from 'vue'
 import { Cookies, Notify } from 'quasar';
 import ContentPreviewComponent from '../components/post/ContentPreview.vue';
+import GlobalConstants from '../constants/GlobalConstants';
 
 export default defineComponent({
   name: 'Register Post',
@@ -155,7 +156,7 @@ export default defineComponent({
   setup() {
     return {
       title: ref(''),
-      post_visibility: ref("PRIVATE"),
+      post_visibility: ref('PRIVATE'),
       body: ref(''),
       author: ref(''),
     }
@@ -187,7 +188,7 @@ export default defineComponent({
           'Authorization': `Bearer ${Cookies.get('access_token')}`
         }
       },
-      url: 'http://localhost:3000/api/posts',
+      url: `${GlobalConstants.API_SERVER}/api/posts`,
       medium: false
     };
   },
@@ -218,7 +219,7 @@ export default defineComponent({
     },
 
     onReset () {
-      this.post_visibility = "PRIVATE"
+      this.post_visibility = 'PRIVATE'
       this.title = '';
       this.tags = [];
       this.author = '';

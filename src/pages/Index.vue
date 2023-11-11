@@ -45,6 +45,7 @@ import { Post } from '../components/models';
 import PostShortComponent from '../components/post/PostShort.vue';
 import axios from 'axios';
 import { Cookies } from 'quasar';
+import GlobalConstants from '../constants/GlobalConstants';
 
 interface ResponseDefault {
   data: {
@@ -60,8 +61,8 @@ export default defineComponent({
     return {
       posts,
       isLoading: true,
-      fetch_url: 'http://localhost:3000/api/posts?status=PUBLIC,PUBLIC_RESTRICTED&limit=4',
-      fetch_count_url: 'http://localhost:3000/api/posts/count?status=PUBLIC,PUBLIC_RESTRICTED',
+      fetch_url: `${GlobalConstants.API_SERVER}/api/posts?status=PUBLIC,PUBLIC_RESTRICTED&limit=4`,
+      fetch_count_url: `${GlobalConstants.API_SERVER}/api/posts/count?status=PUBLIC,PUBLIC_RESTRICTED`,
       config: {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`

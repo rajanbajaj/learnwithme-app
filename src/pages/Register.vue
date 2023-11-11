@@ -94,6 +94,7 @@ import { defineComponent } from 'vue';
 import axios from 'axios';
 import { ref } from 'vue'
 import { Notify } from 'quasar'
+import GlobalConstants from '../constants/GlobalConstants';
 
 export default defineComponent({
   name: 'Register',
@@ -127,7 +128,7 @@ export default defineComponent({
         'Other'
       ],
       profileTypeOptions: ['PUBLIC', 'PRIVATE'],
-      url: 'http://localhost:3000/api/members',
+      url: `${GlobalConstants.API_SERVER}/api/members`,
       success: false
     };
   },

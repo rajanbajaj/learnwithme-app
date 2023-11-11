@@ -148,6 +148,7 @@ import { ref } from 'vue'
 import { Cookies, Notify } from 'quasar';
 import ContentPreviewComponent from '../components/post/ContentPreview.vue';
 import { Post } from '../components/models';
+import GlobalConstants from '../constants/GlobalConstants';
 
 interface ResponseDefault {
   data: Post
@@ -194,7 +195,7 @@ export default defineComponent({
           'Authorization': `Bearer ${Cookies.get('access_token')}`
         }
       },
-      fetch_url: `http://localhost:3000/api/posts/${this.$route.params.id}`,
+      fetch_url: `${GlobalConstants.API_SERVER}/api/posts/${this.$route.params.id}`,
       medium: false
     };
   },

@@ -38,6 +38,7 @@ import { defineComponent } from 'vue';
 import axios from 'axios';
 import { ref } from 'vue'
 import { Cookies } from 'quasar';
+import GlobalConstants from '../constants/GlobalConstants';
 
 export default defineComponent({
   name: 'Register Media Group',
@@ -63,7 +64,7 @@ export default defineComponent({
           'Authorization': `Bearer ${Cookies.get('access_token')}`
         }
       },
-      url: 'http://localhost:3000/api/media-groups'
+      url: `${GlobalConstants.API_SERVER}/api/media-groups`
     };
   },
   methods: {
